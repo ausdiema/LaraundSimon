@@ -32,7 +32,7 @@
 
     .card {
       background: white;
-      padding: 30px;
+      padding: 25px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
@@ -48,13 +48,13 @@
 
     p {
       color: #555;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       line-height: 1.4;
     }
 
     button {
       padding: 12px 20px;
-      margin: 10px;
+      margin: 8px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
@@ -79,70 +79,68 @@
       background-color: #aaa;
     }
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      resize: none;
     }
 
-    .hidden {
-      display: none;
+    .heart-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Hey Lara ❤️</h1>
+<div class="heart-container" id="hearts"></div>
 
-    <p><b>Meine Frage an dich:</b><br> Kriegen wir alles wieder hin? 🥺❤️</p>
+<div class="card">
+  <h1>Hey Lara ❤️</h1>
 
-    <button class="yes" id="yesBtn" onclick="answer(true)">Ja ganz sicher ❤️</button>
-    <button class="no" id="noBtn" onclick="answer(false)">Ich weiß nicht</button>
+  <p><b>Kriegen wir alles wieder hin? 🥺❤️</b></p>
 
-    <p id="response" class="hidden"></p>
-  </div>
+  <form action="https://formspree.io/f/xgorvend" method="POST" id="form">
 
-  <!-- HIDDEN FORM (Formspree) -->
-  <form id="form" action="https://formspree.io/f/xgorvend" method="POST" style="display:none;">
-    <input type="text" name="answer" id="formAnswer">
+    <input type="hidden" name="answer" id="answerField">
+
+    <button type="button" class="yes" onclick="selectAnswer('JA')">Ja ganz sicher ❤️</button>
+    <button type="button" class="no" onclick="selectAnswer('NEIN')">Ich weiß nicht</button>
+
+    <textarea name="message" placeholder="Wenn du mir noch etwas sagen willst ❤️" rows="5"></textarea>
+
+    <button type="submit" class="yes">Absenden ❤️</button>
+
   </form>
+</div>
 
-  <script>
-    function createHearts() {
-      for (let i = 0; i < 20; i++) {
-        let heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerHTML = '❤️';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (3 + Math.random() * 5) + 's';
-        document.body.appendChild(heart);
-      }
+<script>
+  function selectAnswer(value) {
+    document.getElementById("answerField").value = value;
+  }
+
+  function createHearts() {
+    const container = document.getElementById("hearts");
+    for (let i = 0; i < 25; i++) {
+      let heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+      container.appendChild(heart);
     }
+  }
 
-    createHearts();
+  createHearts();
+</script>
 
-    function answer(yes) {
-      const el = document.getElementById('response');
-      const yesBtn = document.getElementById('yesBtn');
-      const noBtn = document.getElementById('noBtn');
-      const formAnswer = document.getElementById('formAnswer');
-      const form = document.getElementById('form');
-
-      el.classList.remove('hidden');
-
-      if (yes) {
-        el.textContent = "Ja ganz sicher ❤️";
-        formAnswer.value = "JA";
-      } else {
-        el.textContent = "Ich verstehe... ich will trotzdem für uns kämpfen ❤️";
-        formAnswer.value = "NEIN";
-      }
-
-      yesBtn.disabled = true;
-      noBtn.disabled = true;
-
-      form.submit();
-    }
-  </script>
 </body>
 </html>
