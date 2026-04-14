@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Für Lara ❤️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4d6d;
+      animation: floatUp 6s linear infinite;
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 420px;
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .yes {
+      background-color: #ff6b81;
+      color: white;
+    }
+
+    .yes:hover {
+      background-color: #ff3b5c;
+    }
+
+    .no {
+      background-color: #ccc;
+    }
+
+    .no:hover {
+      background-color: #aaa;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Hey Lara ❤️</h1>
+
+    <p><b>Meine Frage an dich:</b><br> Kriegen wir alles wieder hin? 🥺❤️</p>
+
+    <button class="yes" id="yesBtn" onclick="answer(true)">Ja ganz sicher ❤️</button>
+    <button class="no" id="noBtn" onclick="answer(false)">Ich weiß nicht</button>
+
+    <p id="response" class="hidden"></p>
+  </div>
+
+  <!-- HIDDEN FORM (Formspree) -->
+  <form id="form" action="https://formspree.io/f/xgorvend" method="POST" style="display:none;">
+    <input type="text" name="answer" id="formAnswer">
+  </form>
+
+  <script>
+    function createHearts() {
+      for (let i = 0; i < 20; i++) {
+        let heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+        document.body.appendChild(heart);
+      }
+    }
+
+    createHearts();
+
+    function answer(yes) {
+      const el = document.getElementById('response');
+      const yesBtn = document.getElementById('yesBtn');
+      const noBtn = document.getElementById('noBtn');
+      const formAnswer = document.getElementById('formAnswer');
+      const form = document.getElementById('form');
+
+      el.classList.remove('hidden');
+
+      if (yes) {
+        el.textContent = "Ja ganz sicher ❤️";
+        formAnswer.value = "JA";
+      } else {
+        el.textContent = "Ich verstehe... ich will trotzdem für uns kämpfen ❤️";
+        formAnswer.value = "NEIN";
+      }
+
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+
+      form.submit();
+    }
+  </script>
+</body>
+</html>
