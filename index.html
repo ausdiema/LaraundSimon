@@ -1,1 +1,147 @@
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Für Lara ❤️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4d6d;
+      animation: floatUp 6s linear infinite;
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 420px;
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 8px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .yes {
+      background-color: #ff6b81;
+      color: white;
+    }
+
+    .yes:hover {
+      background-color: #ff3b5c;
+    }
+
+    .no {
+      background-color: #ccc;
+    }
+
+    .no:hover {
+      background-color: #aaa;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      resize: none;
+    }
+
+    .heart-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="heart-container" id="hearts"></div>
+
+<div class="card">
+  <h1>Hey Lara ❤️</h1>
+
+  <p><b>Kriegen wir alles wieder hin? 🥺❤️</b></p>
+
+  <form action="https://formspree.io/f/xgorvend" method="POST" id="form">
+
+    <input type="hidden" name="answer" id="answerField">
+
+    <button type="button" class="yes" onclick="selectAnswer('JA')">Ja ganz sicher ❤️</button>
+    <button type="button" class="no" onclick="selectAnswer('NEIN')">Ich weiß nicht</button>
+
+    <textarea name="message" placeholder="Wenn du mir noch etwas sagen willst ❤️" rows="5"></textarea>
+
+    <button type="submit" class="yes">Absenden ❤️</button>
+
+  </form>
+</div>
+
+<script>
+  function selectAnswer(value) {
+    document.getElementById("answerField").value = value;
+  }
+
+  function createHearts() {
+    const container = document.getElementById("hearts");
+    for (let i = 0; i < 25; i++) {
+      let heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+      container.appendChild(heart);
+    }
+  }
+
+  createHearts();
+</script>
+
+</body>
+</html>
