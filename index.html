@@ -4,144 +4,440 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Für Lara ❤️</title>
+  <title>Für Lara 🤍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:    #c9737a;
+      --rose-dk: #a85158;
+      --cream:   #fdf6f0;
+      --text:    #3a2a2e;
+      --muted:   #9a8080;
+      --border:  #e8d5d0;
+      --card:    #ffffff;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      background: var(--cream);
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
     }
 
-    .heart {
+    /* ── Petals ── */
+    .petal-layer {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .petal {
       position: absolute;
-      color: #ff4d6d;
-      animation: floatUp 6s linear infinite;
-      font-size: 20px;
-      opacity: 0.7;
+      width: 10px; height: 14px;
+      border-radius: 50% 0 50% 0;
+      background: var(--rose);
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+      5%   { opacity: 0.35; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
     }
 
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(1); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-    }
-
+    /* ── Card ── */
     .card {
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 420px;
-      z-index: 2;
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(180, 80, 90, 0.10), 0 2px 8px rgba(0,0,0,0.04);
+      padding: 44px 40px 40px;
+      max-width: 480px;
+      width: 100%;
       position: relative;
+      z-index: 2;
+      border: 1px solid var(--border);
     }
 
-    h1 {
-      font-size: 24px;
+    .eyebrow {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose);
       margin-bottom: 10px;
     }
 
-    p {
-      color: #555;
-      margin-bottom: 15px;
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── Progress dots ── */
+    .progress {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.35s, transform 0.35s;
+    }
+    .dot.active  { background: var(--rose); transform: scale(1.25); }
+    .dot.done    { background: var(--rose-dk); }
+
+    /* ── Steps ── */
+    .step { display: none; }
+    .step.visible {
+      display: block;
+      animation: fadeSlide 0.4s ease both;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .question {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 22px;
       line-height: 1.4;
     }
 
-    button {
-      padding: 12px 20px;
-      margin: 8px;
-      border: none;
-      border-radius: 10px;
+    /* ── Choices ── */
+    .choices { display: flex; flex-direction: column; gap: 12px; }
+
+    .choice {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
       cursor: pointer;
-      font-size: 16px;
-      transition: 0.2s;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: white;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .choice:hover {
+      border-color: var(--rose);
+      background: #fdf2f3;
+      transform: translateY(-1px);
+    }
+    .choice.selected {
+      border-color: var(--rose);
+      background: linear-gradient(135deg, #fff5f6, #fff0f1);
+      font-weight: 400;
+    }
+    .choice .icon {
+      font-size: 18px;
+      width: 26px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .choice .check {
+      margin-left: auto;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .choice.selected .check {
+      background: var(--rose);
+      border-color: var(--rose);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l2.5 2.5L9 1' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
-    .yes {
-      background-color: #ff6b81;
-      color: white;
+    /* ── Textarea ── */
+    .msg-wrap { margin-top: 20px; }
+    .msg-wrap label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
     }
-
-    .yes:hover {
-      background-color: #ff3b5c;
-    }
-
-    .no {
-      background-color: #ccc;
-    }
-
-    .no:hover {
-      background-color: #aaa;
-    }
-
     textarea {
       width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      margin-top: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      color: var(--text);
       resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fdfafa;
+    }
+    textarea:focus { border-color: var(--rose); }
+
+    /* ── Next / Submit button ── */
+    .btn-row { margin-top: 28px; }
+    .btn-next {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #c9737a, #a85158);
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 17px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .btn-next:hover  { opacity: 0.9; transform: translateY(-1px); }
+    .btn-next:active { transform: translateY(0); }
+
+    /* ── Confirmation ── */
+    .confirm {
+      text-align: center;
+      display: none;
+      animation: fadeSlide 0.5s ease both;
+    }
+    .confirm .big-heart {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 18px;
+    }
+    .confirm h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .confirm p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
     }
 
-    .heart-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      z-index: 0;
+    /* ── Error ── */
+    .error-msg {
+      font-size: 12px;
+      color: #c0303a;
+      margin-top: 8px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="heart-container" id="hearts"></div>
+<div class="petal-layer" id="petals"></div>
 
 <div class="card">
-  <h1>Hey Lara ❤️</h1>
+  <div class="eyebrow">3 Jahre mit dir ✦ 13. Mai 2025</div>
+  <h1>Hey Lara 🤍</h1>
+  <p class="subtitle">Ein paar kleine Fragen — ich will diesen Abend für uns perfekt machen.</p>
 
-  <p><b>Kriegen wir alles wieder hin? 🥺❤️</b></p>
+  <div class="progress">
+    <div class="dot active" id="d0"></div>
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+  </div>
 
-  <form action="https://formspree.io/f/xgorvend" method="POST" id="form">
+  <!-- STEP 0 -->
+  <div class="step visible" id="step-0">
+    <div class="question">Gehst du mit mir am 13. Mai auf ein Date zum 3-jährigen Jahrestag? 🥂</div>
+    <div class="choices" id="choices-0">
+      <button class="choice" onclick="pick(0,'Ja, unbedingt ❤️',this)">
+        <span class="icon">❤️</span> Ja, unbedingt!
+        <span class="check"></span>
+      </button>
+      <button class="choice" onclick="pick(0,'Vielleicht… 🥺',this)">
+        <span class="icon">🥺</span> Vielleicht…
+        <span class="check"></span>
+      </button>
+    </div>
+    <div class="error-msg" id="err-0">Bitte wähle eine Option.</div>
+    <div class="btn-row"><button class="btn-next" onclick="next(0)">Weiter →</button></div>
+  </div>
 
-    <input type="hidden" name="answer" id="answerField">
+  <!-- STEP 1 -->
+  <div class="step" id="step-1">
+    <div class="question">Um wie viel Uhr soll ich den Tisch reservieren? 🕯️</div>
+    <div class="choices" id="choices-1">
+      <button class="choice" onclick="pick(1,'19:45 Uhr',this)">
+        <span class="icon">🕰️</span> 19:45 Uhr
+        <span class="check"></span>
+      </button>
+      <button class="choice" onclick="pick(1,'20:00 Uhr',this)">
+        <span class="icon">🕰️</span> 20:00 Uhr
+        <span class="check"></span>
+      </button>
+      <button class="choice" onclick="pick(1,'20:30 Uhr',this)">
+        <span class="icon">🕰️</span> 20:30 Uhr
+        <span class="check"></span>
+      </button>
+    </div>
+    <div class="error-msg" id="err-1">Bitte wähle eine Uhrzeit.</div>
+    <div class="btn-row"><button class="btn-next" onclick="next(1)">Weiter →</button></div>
+  </div>
 
-    <button type="button" class="yes" onclick="selectAnswer('JA')">Ja ganz sicher ❤️</button>
-    <button type="button" class="no" onclick="selectAnswer('NEIN')">Ich weiß nicht</button>
+  <!-- STEP 2 -->
+  <div class="step" id="step-2">
+    <div class="question">Welches Restaurant darf es sein? 🍽️</div>
+    <div class="choices" id="choices-2">
+      <button class="choice" onclick="pick(2,'Naboo',this)">
+        <span class="icon">🌙</span> Naboo
+        <span class="check"></span>
+      </button>
+      <button class="choice" onclick="pick(2,'Al / Das Maestro',this)">
+        <span class="icon">🎼</span> Al / Das Maestro
+        <span class="check"></span>
+      </button>
+      <button class="choice" onclick="pick(2,'Waldschenke',this)">
+        <span class="icon">🌿</span> Waldschenke
+        <span class="check"></span>
+      </button>
+    </div>
+    <div class="error-msg" id="err-2">Bitte wähle ein Restaurant.</div>
 
-    <textarea name="message" placeholder="Wenn du mir noch etwas sagen willst ❤️" rows="5"></textarea>
+    <div class="divider"></div>
 
-    <button type="submit" class="yes">Absenden ❤️</button>
+    <div class="msg-wrap">
+      <label>Noch etwas für mich? (optional)</label>
+      <textarea id="message" rows="4" placeholder="Schreib mir einfach…"></textarea>
+    </div>
 
-  </form>
+    <div class="btn-row"><button class="btn-next" onclick="submit()">Absenden 🤍</button></div>
+  </div>
+
+  <!-- CONFIRMATION -->
+  <div class="confirm" id="confirm">
+    <span class="big-heart">🤍</span>
+    <h2>Danke, Lara.</h2>
+    <p>Ich freue mich so sehr auf unseren Abend.<br>Drei Jahre mit dir — ich würde es immer wieder so machen. 🥂</p>
+  </div>
 </div>
 
 <script>
-  function selectAnswer(value) {
-    document.getElementById("answerField").value = value;
+  const answers = { step0: '', step1: '', step2: '', message: '' };
+  let current = 0;
+
+  function pick(step, value, btn) {
+    answers['step' + step] = value;
+    document.querySelectorAll('#choices-' + step + ' .choice')
+      .forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('err-' + step).style.display = 'none';
   }
 
-  function createHearts() {
-    const container = document.getElementById("hearts");
-    for (let i = 0; i < 25; i++) {
-      let heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerHTML = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (3 + Math.random() * 5) + "s";
-      container.appendChild(heart);
+  function next(step) {
+    if (!answers['step' + step]) {
+      document.getElementById('err-' + step).style.display = 'block';
+      return;
+    }
+    document.getElementById('step-' + step).classList.remove('visible');
+    current = step + 1;
+    document.getElementById('step-' + current).classList.add('visible');
+    updateDots();
+  }
+
+  function updateDots() {
+    for (let i = 0; i < 3; i++) {
+      const d = document.getElementById('d' + i);
+      d.classList.remove('active', 'done');
+      if (i < current) d.classList.add('done');
+      if (i === current) d.classList.add('active');
     }
   }
 
-  createHearts();
-</script>
+  async function submit() {
+    if (!answers.step2) {
+      document.getElementById('err-2').style.display = 'block';
+      return;
+    }
+    answers.message = document.getElementById('message').value;
 
+    const body = new URLSearchParams({
+      'Frage 1 – Date am 13.05': answers.step0,
+      'Frage 2 – Uhrzeit':       answers.step1,
+      'Frage 3 – Restaurant':    answers.step2,
+      'Nachricht':               answers.message || '(keine)'
+    });
+
+    try {
+      await fetch('https://formspree.io/f/xgorvend', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body
+      });
+    } catch (e) { /* still show confirmation */ }
+
+    // Show confirmation
+    document.getElementById('step-2').classList.remove('visible');
+    document.querySelector('.progress').style.display = 'none';
+    document.getElementById('confirm').style.display = 'block';
+    document.querySelector('.eyebrow').style.display = 'none';
+    document.querySelector('h1').style.display = 'none';
+    document.querySelector('.subtitle').style.display = 'none';
+    launchExtraHearts();
+  }
+
+  // ── Petals ──
+  function buildPetals() {
+    const layer = document.getElementById('petals');
+    const colors = ['#e8a0a8','#d4b0b8','#f0c8d0','#c9737a','#edc0c5'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left            = Math.random() * 100 + 'vw';
+      p.style.top             = '-20px';
+      p.style.animationDelay  = (Math.random() * 10) + 's';
+      p.style.animationDuration = (6 + Math.random() * 7) + 's';
+      p.style.background      = colors[Math.floor(Math.random() * colors.length)];
+      p.style.width           = (8 + Math.random() * 8) + 'px';
+      p.style.height          = (11 + Math.random() * 8) + 'px';
+      p.style.transform       = 'rotate(' + (Math.random() * 360) + 'deg)';
+      layer.appendChild(p);
+    }
+  }
+  buildPetals();
+
+  function launchExtraHearts() {
+    const layer = document.getElementById('petals');
+    for (let i = 0; i < 20; i++) {
+      const h = document.createElement('div');
+      h.style.cssText = `position:absolute;font-size:${16+Math.random()*18}px;left:${Math.random()*100}vw;top:100vh;opacity:0;animation:fall ${3+Math.random()*4}s linear 1;animation-delay:${Math.random()*2}s;pointer-events:none;`;
+      h.textContent = '🤍';
+      layer.appendChild(h);
+      h.addEventListener('animationend', () => h.remove());
+    }
+  }
+</script>
 </body>
 </html>
